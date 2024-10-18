@@ -1,3 +1,4 @@
+import { getRandomAnimation } from './animations.js';
 const links = [
     { url: 'https://github.com/sw1ftin', text: 'GitHub', color: '#333' },
     { url: 'https://discord.com/users/sw1ftin', text: 'Discord', color: '#7289DA' },
@@ -30,13 +31,6 @@ function createLinks() {
     });
 }
 
-function updateVisitorCount() {
-    let count = localStorage.getItem('visitorCount') || 0;
-    count = parseInt(count) + 1;
-    localStorage.setItem('visitorCount', count);
-    document.getElementById('count').textContent = count;
-}
-
 const themeToggle = document.getElementById('theme-toggle');
 const languageToggle = document.getElementById('language-toggle');
 const body = document.body;
@@ -50,7 +44,6 @@ themeToggle.addEventListener('click', () => {
 const translations = {
     en: {
         bio: 'C# and Python Developer | <a href="https://fiit-urfu.ru/" target="_blank" class="fiit-link">FIIT Bachelor Student</a>',
-        visitors: 'Visits:',
         github: 'GitHub',
         discord: 'Discord',
         telegram: 'Telegram',
@@ -59,7 +52,6 @@ const translations = {
     },
     ru: {
         bio: 'C# и Python разработчик | <a href="https://fiit-urfu.ru/" target="_blank" class="fiit-link">Студент-бакалавр ФИИТ</a>',
-        visitors: 'Посещения:',
         github: 'GitHub',
         discord: 'Discord',
         telegram: 'Telegram',
@@ -72,7 +64,6 @@ let currentLang = 'en';
 
 function updateLanguage() {
     document.querySelector('.bio').innerHTML = translations[currentLang].bio;
-    document.getElementById('visitor-count').firstChild.textContent = translations[currentLang].visitors + ' ';
     links.forEach((link, index) => {
         const linkElement = document.querySelectorAll('.link-button')[index];
         linkElement.textContent = translations[currentLang][link.text.toLowerCase()];
@@ -85,27 +76,62 @@ languageToggle.addEventListener('click', () => {
     updateLanguage();
 });
 
-document.addEventListener('DOMContentLoaded', () => {
+let scene, camera, renderer, animate;
+
+function initThree() {
+    scene = new THREE.Scene();
+    camera = new THREE.OrthographicCamera(
+        window.innerWidth / -2, window.innerWidth / 2,
+        window.innerHeight / 2, window.innerHeight / -2,
+        0.1, 1000
+    );
+    renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    document.getElementById('particles-js').appendChild(renderer.domElement);
+
+    const animation = getRandomAnimation();
+    animate = animation(scene, camera);
+
+    camera.position.z = 100;
+
+    animationLoop();
+}
+
+function animationLoop() {
+    requestAnimationFrame(animationLoop);
+    animate();
+    renderer.render(scene, camera);
+}
+
+function onWindowResize() {
+    const aspect = window.innerWidth / window.innerHeight;
+    const frustumSize = 1000;
+
+    camera.left = frustumSize * aspect / -2;
+    camera.right = frustumSize * aspect / 2;
+    camera.top = frustumSize / 2;
+    camera.bottom = frustumSize / -2;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    scene.children.forEach(child => {
+        if (child instanceof THREE.Mesh) {
+            child.position.set(
+                Math.random() * window.innerWidth - window.innerWidth / 2,
+                Math.random() * window.innerHeight - window.innerHeight / 2,
+                0
+            );
+        }
+    });
+}
+
+window.addEventListener('resize', onWindowResize, false);
+
+window.addEventListener('load', () => {
     loadAvatar();
     createLinks();
-    updateVisitorCount();
     updateLanguage();
-});
-
-particlesJS('particles-js', {
-    particles: {
-        number: { value: 50, density: { enable: true, value_area: 800 } },
-        color: { value: '#1793d1' },
-        shape: { type: 'triangle', stroke: { width: 0, color: '#000000' } },
-        opacity: { value: 0.5, random: false },
-        size: { value: 3, random: true },
-        line_linked: { enable: true, distance: 150, color: '#1793d1', opacity: 0.4, width: 1 },
-        move: { enable: true, speed: 3, direction: 'none', random: false, straight: false, out_mode: 'out', bounce: false }
-    },
-    interactivity: {
-        detect_on: 'canvas',
-        events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' }, resize: true },
-        modes: { repulse: { distance: 100, duration: 0.4 }, push: { particles_nb: 4 } }
-    },
-    retina_detect: true
+    initThree();
 });

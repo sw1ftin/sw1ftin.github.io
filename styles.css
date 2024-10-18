@@ -159,6 +159,7 @@ h1 {
     top: 0;
     left: 0;
     z-index: -1;
+    opacity: 0.5;
 }
 
 body.light-theme {
@@ -203,4 +204,22 @@ body.light-theme .link-button {
 body.light-theme .link-button:hover {
     background-color: #e0e0e0;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.footer-text {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #bb86fc;
+}
+
+body.light-theme .footer-text {
+    color: #6200ee;
+}
+
+body.light-theme #particles-js {
+    opacity: 0.3;
+}
+
+body.light-theme .particles-js-canvas-el {
+    opacity: 0.4;
 }
