@@ -32,48 +32,26 @@ function createLinks() {
 }
 
 const themeToggle = document.getElementById('theme-toggle');
-const languageToggle = document.getElementById('language-toggle');
 const body = document.body;
+
+function setCookie(name, value, days) {
+    const expires = new Date(Date.now() + days * 864e5).toUTCString();
+    document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=/';
+}
+
+function getCookie(name) {
+    return document.cookie.split('; ').reduce((r, v) => {
+        const parts = v.split('=');
+        return parts[0] === name ? decodeURIComponent(parts[1]) : r;
+    }, '');
+}
 
 themeToggle.addEventListener('click', () => {
     body.classList.toggle('light-theme');
+    const isDarkTheme = !body.classList.contains('light-theme');
     const icon = themeToggle.querySelector('.material-icons');
-    icon.textContent = body.classList.contains('light-theme') ? 'light_mode' : 'dark_mode';
-});
-
-const translations = {
-    en: {
-        bio: 'C# and Python Developer | <a href="https://fiit-urfu.ru/" target="_blank" class="fiit-link">FIIT Bachelor Student</a>',
-        github: 'GitHub',
-        discord: 'Discord',
-        telegram: 'Telegram',
-        spotify: 'Spotify',
-        steam: 'Steam',
-    },
-    ru: {
-        bio: 'C# и Python разработчик | <a href="https://fiit-urfu.ru/" target="_blank" class="fiit-link">Студент-бакалавр ФИИТ</a>',
-        github: 'GitHub',
-        discord: 'Discord',
-        telegram: 'Telegram',
-        spotify: 'Spotify',
-        steam: 'Steam',
-    }
-};
-
-let currentLang = 'en';
-
-function updateLanguage() {
-    document.querySelector('.bio').innerHTML = translations[currentLang].bio;
-    links.forEach((link, index) => {
-        const linkElement = document.querySelectorAll('.link-button')[index];
-        linkElement.textContent = translations[currentLang][link.text.toLowerCase()];
-    });
-}
-
-languageToggle.addEventListener('click', () => {
-    currentLang = currentLang === 'en' ? 'ru' : 'en';
-    languageToggle.textContent = currentLang.toUpperCase();
-    updateLanguage();
+    icon.textContent = isDarkTheme ? 'dark_mode' : 'light_mode';
+    setCookie('theme', isDarkTheme ? 'dark' : 'light', 30);
 });
 
 let scene, camera, renderer, animate;
@@ -129,9 +107,17 @@ function onWindowResize() {
 
 window.addEventListener('resize', onWindowResize, false);
 
+function loadSavedTheme() {
+    const savedTheme = getCookie('theme');
+    if (savedTheme === 'light') {
+        body.classList.add('light-theme');
+        themeToggle.querySelector('.material-icons').textContent = 'light_mode';
+    }
+}
+
 window.addEventListener('load', () => {
+    loadSavedTheme();
     loadAvatar();
     createLinks();
-    updateLanguage();
     initThree();
 });
