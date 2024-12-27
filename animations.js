@@ -1,6 +1,6 @@
 function createMaterialDesignShapes(scene, camera) {
     const shapes = [];
-    const numShapes = 15;
+    const numShapes = 25;
 
     const colors = [
         new THREE.Color(0x6200ee),
@@ -66,7 +66,12 @@ function createMaterialDesignShapes(scene, camera) {
     };
 }
 
+import { getRandomAnimation as getWinterAnimation, isWinterSeason } from './winter_animations.js';
+
 function getRandomAnimation() {
+    if (isWinterSeason()) {
+        return getWinterAnimation();
+    }
     return createMaterialDesignShapes;
 }
 

@@ -1,4 +1,5 @@
 import { getRandomAnimation } from './animations.js';
+import './winter_animations.js';
 const links = [
     { url: 'https://github.com/sw1ftin', text: 'GitHub', color: '#333' },
     { url: 'https://discord.com/users/sw1ftin', text: 'Discord', color: '#7289DA' },
