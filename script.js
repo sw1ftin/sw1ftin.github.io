@@ -13,6 +13,9 @@ function loadAvatar() {
         .then(response => response.json())
         .then(data => {
             document.getElementById('avatar').src = data.avatar_url;
+            document.querySelectorAll('link[rel*="icon"]').forEach(link => {
+                link.href = data.avatar_url;
+            });
         })
         .catch(error => console.error('Error loading avatar:', error));
 }
