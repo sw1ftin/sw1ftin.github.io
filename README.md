@@ -23,7 +23,7 @@ A modern, Material Design-inspired links page - a self-hosted alternative to Lin
 
 ## Live Demo
 
-Visit [sw1ft.me](https://sw1ft.me) to see the website in action.
+Visit [sw1ft.ru](https://sw1ft.ru) to see the website in action.
 
 ## Development
 
