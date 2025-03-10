@@ -2,10 +2,11 @@ import { getRandomAnimation } from './animations.js';
 import './winter_animations.js';
 const links = [
     { url: 'https://github.com/sw1ftin', text: 'GitHub', color: '#333' },
-    { url: 'https://discord.com/users/sw1ftin', text: 'Discord', color: '#7289DA' },
+    { url: 'https://discord.andcool.ru/550222931725254667', text: 'Discord', color: '#7289DA' },
     { url: 'https://t.me/sw1ftin', text: 'Telegram', color: '#0088cc' },
     { url: 'https://open.spotify.com/user/31tsmc56hj2nhmzi6flvfcu6727y', text: 'Spotify', color: '#1DB954' },
     { url: 'https://steamcommunity.com/id/jakobsw1ft/', text: 'Steam', color: '#171a21' },
+    { url: 'https://www.donationalerts.com/r/sw1ftin', text: 'DA', color: '#cc5431'}
 ];
 
 function loadAvatar() {
