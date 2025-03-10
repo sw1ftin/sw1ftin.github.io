@@ -355,3 +355,12 @@ body.light-theme .fiit-link {
 body.light-theme .fiit-link:hover {
     background-color: rgba(136, 41, 224, 0.25);
 }
+
+@font-face {
+    font-family: 'SymbolsFont';
+    src: url('/SymbolsNerdFont-Regular.ttf') format('truetype');
+}
+
+#footer {
+    font-family: 'SymbolsFont', sans-serif;
+}
